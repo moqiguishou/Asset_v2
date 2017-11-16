@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using FairyGUI;
 
 public delegate int select_direction_delegate();
 public class UIRoot : MonoBehaviour {
 	GComponent main_comp;//主组件
-	GComponent register_comp;//登录组件
+	GComponent login_comp;//登录组件
 
 	Controller select_option_ctrl;//登录界面-选择选项
 
@@ -24,6 +25,11 @@ public class UIRoot : MonoBehaviour {
 		if (Input.GetKeyUp("s")) {
 			register_select_option (down_select);
 		}
+
+		if (Input.GetMouseButtonDown (1)) {
+			main_comp.Dispose ();
+			SceneManager.LoadScene (1);
+		}
 	}
 	//******************************************************************
 	private void comp_init(){
@@ -31,8 +37,8 @@ public class UIRoot : MonoBehaviour {
 		main_comp = UIPackage.CreateObject ("TankFight", "main").asCom;
 		GRoot.inst.AddChild (main_comp);
 
-		register_comp 		= main_comp.GetChild ("register").asCom;
-		select_option_ctrl 	= register_comp.GetController ("select_option");
+		login_comp 		= main_comp.GetChild ("login").asCom;
+		select_option_ctrl 	= login_comp.GetController ("select_option");
 	}
 
 
