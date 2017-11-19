@@ -4,25 +4,45 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using FairyGUI;
 
-public delegate int select_direction_delegate();
+public delegate void my_delegate_no_param();
+public delegate void my_delegate(object str);
+//public delegate object my_delegate_return_object(string param, string param_type);
 public class UIRoot : MonoBehaviour {
 	GComponent main_comp;//主组件
+	GComponent bg_comp;//背景组件
 	GComponent login_comp;//登录组件
 
+	Controller insert_bg;//主界面-背景图上升
 	Controller select_option_ctrl;//登录界面-选择选项
-
+	Controller select_tank;//登录界面-选择坦克
+	//**********************************************
+	Dictionary<string, bool> times = new Dictionary<string, bool>();
+	Logger logger = new Logger();
+	
+	bool isable_select = false;
+	//**********************************************
 	// Use this for initialization
 	void Start () {
 		comp_init ();
+		select_tank.selectedIndex = 1;
+		logger.debug("[BackgroundComponent]:bg slow insert ...");
+		insert_bg.selectedIndex = 1;
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		if (Input.GetKeyUp("w")) {
+	void Update ()
+	{
+		if (bg_comp.position.y == 0) {
+			//logger.debug ("[BackgroundComponent]:bg arrive assigned place");
+			do_once(logger.debug, "logger.debug", "[BackgroundComponent]:bg arrive assigned place", "s");
+			isable_select = true;
+		}
+		
+		if (Input.GetKeyUp ("w")) {
 			register_select_option (up_select);
 		}
 
-		if (Input.GetKeyUp("s")) {
+		if (Input.GetKeyUp ("s")) {
 			register_select_option (down_select);
 		}
 
@@ -30,34 +50,79 @@ public class UIRoot : MonoBehaviour {
 			main_comp.Dispose ();
 			SceneManager.LoadScene (1);
 		}
+		if (times.ContainsKey("bb")) {
+			Debug.Log("ooo=================================");
+		}
+		logger.log(select_option_ctrl.selectedIndex + "");
 	}
 	//******************************************************************
 	private void comp_init(){
+		logger.debug("[FairyGui]:initializing ...");
 		UIPackage.AddPackage ("UI/TankFight");
 		main_comp = UIPackage.CreateObject ("TankFight", "main").asCom;
 		GRoot.inst.AddChild (main_comp);
 
-		login_comp 		= main_comp.GetChild ("login").asCom;
+		insert_bg = main_comp.GetController("insert_bg");
+		bg_comp   = main_comp.GetChild("background").asCom;
+		logger.log("[FairyGui]:MainCompoment load finish");
+		login_comp 	      = bg_comp.GetChild ("login").asCom;
+		logger.log("[FairyGui]:BackgroundCompoment load finish");
 		select_option_ctrl 	= login_comp.GetController ("select_option");
+		select_tank         = login_comp.GetController ("select_tank");
+		logger.log("[FairyGui]:LoginCompoment load finish");
+		logger.debug("[FairyGui]:initialize is over");
 	}
 
-
-	//*****************************************************************
-	private void register_select_option(select_direction_delegate select_direction){
-		select_option_ctrl.selectedIndex = select_direction ();
-	}
-
-	private int up_select(){
+	private void up_select ()
+	{
 		if (select_option_ctrl.selectedIndex == 0) {
-			return 2;
+			select_option_ctrl.selectedIndex = 2;
+		} else {
+			select_option_ctrl.selectedIndex -= 1;
 		}
-		return select_option_ctrl.selectedIndex - 1;
 	}
 
-	private int down_select(){
+	private void down_select ()
+	{
 		if (select_option_ctrl.selectedIndex == 2) {
-			return 0;
+			select_option_ctrl.selectedIndex = 0;
+		} else {
+			select_option_ctrl.selectedIndex += 1;
 		}
-		return select_option_ctrl.selectedIndex + 1;
+	}
+	
+	private void table_times_add (string key){
+		times.Add (key, true);
+		logger.warn ("[Function][do_once]:" + key + "be done once and has been a member in table 'times'");
+	}
+//	private bool is_times (string key){
+//		return true;
+//	}
+
+	//delegate*****************************************************************
+	private void register_select_option(my_delegate_no_param select_direction){
+		select_direction ();
+	}
+
+	private void do_once (my_delegate func, string key, bool is_param, string param, string param_type)
+	{
+		bool ret = true;
+		if (times.ContainsKey (key) && times [key]) {
+			return;
+		}
+		switch (param_type) {
+		case "s":
+			func (param);
+			table_times_add(key);
+			break;
+		case "n":
+			int param_n;
+			ret = int.TryParse (param, out param_n);
+			if (ret) {
+				func(param_n);
+				table_times_add(key);
+			}
+			break;
+		}
 	}
 }
