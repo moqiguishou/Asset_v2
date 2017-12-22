@@ -25,7 +25,6 @@ public class UIRoot : MonoBehaviour {
 	void Start () {
 		comp_init ();
 		select_tank.selectedIndex = 1;
-		logger.debug("[BackgroundComponent]:bg slow insert ...");
 		insert_bg.selectedIndex = 1;
 	}
 	
@@ -33,8 +32,6 @@ public class UIRoot : MonoBehaviour {
 	void Update ()
 	{
 		if (bg_comp.position.y == 0) {
-			//logger.debug ("[BackgroundComponent]:bg arrive assigned place");
-			do_once(logger.debug, "logger.debug", "[BackgroundComponent]:bg arrive assigned place", "s");
 			isable_select = true;
 		}
 		
@@ -51,26 +48,20 @@ public class UIRoot : MonoBehaviour {
 			SceneManager.LoadScene (1);
 		}
 		if (times.ContainsKey("bb")) {
-			Debug.Log("ooo=================================");
+			//Debug.Log("ooo=================================");
 		}
-		logger.log(select_option_ctrl.selectedIndex + "");
 	}
 	//******************************************************************
 	private void comp_init(){
-		logger.debug("[FairyGui]:initializing ...");
 		UIPackage.AddPackage ("UI/TankFight");
 		main_comp = UIPackage.CreateObject ("TankFight", "main").asCom;
 		GRoot.inst.AddChild (main_comp);
 
 		insert_bg = main_comp.GetController("insert_bg");
 		bg_comp   = main_comp.GetChild("background").asCom;
-		logger.log("[FairyGui]:MainCompoment load finish");
 		login_comp 	      = bg_comp.GetChild ("login").asCom;
-		logger.log("[FairyGui]:BackgroundCompoment load finish");
 		select_option_ctrl 	= login_comp.GetController ("select_option");
 		select_tank         = login_comp.GetController ("select_tank");
-		logger.log("[FairyGui]:LoginCompoment load finish");
-		logger.debug("[FairyGui]:initialize is over");
 	}
 
 	private void up_select ()
