@@ -32,7 +32,11 @@ public class UIRoot : MonoBehaviour {
 		comp_init ();
 		select_tank.selectedIndex = 1;
 		insert_bg.selectedIndex = 1;
-	}
+        Dictionary<string, int> my = new Dictionary<string, int>();
+        //my.Add("a", 3);
+        string[] str = { "a", "b", "c", "25", "asd", "moqitest" };
+        logger.log("aaa", 3, str);
+    }
 	
 	// Update is called once per frame
 	void Update ()
