@@ -21,10 +21,7 @@ public class UIRoot : MonoBehaviour {
     Controller select_option_ctrl;  //登录界面-选择选项
 	Controller select_tank;         //登录界面-选择坦克
 	//**********************************************
-	Dictionary<string, bool> times = new Dictionary<string, bool>();
 	Logger logger = new Logger();
-	DoOnce do_one_time = new DoOnce();
-	
 	bool isable_select = false;
 	//**********************************************
 	// Use this for initialization
@@ -32,10 +29,10 @@ public class UIRoot : MonoBehaviour {
 		comp_init ();
 		select_tank.selectedIndex = 1;
 		insert_bg.selectedIndex = 1;
-        Dictionary<string, int> my = new Dictionary<string, int>();
-        //my.Add("a", 3);
-        string[] str = { "a", "b", "c", "25", "asd", "moqitest" };
-        logger.log("aaa", 3, str);
+        //Dictionary<string, int> my = new Dictionary<string, int>();
+        ////my.Add("a", 3);
+        //string[] str = { "a", "b", "c", "25", "asd", "moqitest" };
+        //logger.log_func("aaa", 3, str);
     }
 	
 	// Update is called once per frame
@@ -52,54 +49,53 @@ public class UIRoot : MonoBehaviour {
 		if (Input.GetKeyUp ("s")) {
 			register_select_option (down_select);
 		}
+
+        if (Input.GetKeyUp("j")) {
+
+        }
         //**************************************************************
-        if (Input.GetKeyUp("1"))
-        {
-            if (show_login.selectedIndex == 0)
-            {
-                show_login.selectedIndex = 1;
-            }
-            else if (show_login.selectedIndex == 1) {
-                show_login.selectedIndex = 0;
-            }
-        }
+  //      if (Input.GetKeyUp("1"))
+  //      {
+  //          if (show_login.selectedIndex == 0)
+  //          {
+  //              show_login.selectedIndex = 1;
+  //          }
+  //          else if (show_login.selectedIndex == 1) {
+  //              show_login.selectedIndex = 0;
+  //          }
+  //      }
 
-        if (Input.GetKeyUp("2"))
-        {
-            if (show_bimu.selectedIndex == 0)
-            {
-                show_bimu.selectedIndex = 1;
-            }
-            else if (show_bimu.selectedIndex == 1)
-            {
-                show_bimu.selectedIndex = 0;
-            }
-        }
+  //      if (Input.GetKeyUp("2"))
+  //      {
+  //          if (show_bimu.selectedIndex == 0)
+  //          {
+  //              show_bimu.selectedIndex = 1;
+  //          }
+  //          else if (show_bimu.selectedIndex == 1)
+  //          {
+  //              show_bimu.selectedIndex = 0;
+  //          }
+  //      }
 
-        if (Input.GetKeyUp("3"))
-        {
-            if (bimu_ctrl.selectedIndex == 0)
-            {
-                bimu_ctrl.selectedIndex = 1;
-            }
-            else if (bimu_ctrl.selectedIndex == 1)
-            {
-                bimu_ctrl.selectedIndex = 0;
-            }
-        }
+  //      if (Input.GetKeyUp("3"))
+  //      {
+  //          if (bimu_ctrl.selectedIndex == 0)
+  //          {
+  //              bimu_ctrl.selectedIndex = 1;
+  //          }
+  //          else if (bimu_ctrl.selectedIndex == 1)
+  //          {
+  //              bimu_ctrl.selectedIndex = 0;
+  //          }
+  //      }
 
-        if (Input.GetMouseButtonDown (1)) {
-			//main_comp.Dispose ();
-			//SceneManager.LoadScene (1);
-		}
-		if (times.ContainsKey("bb")) {
-			//Debug.Log("ooo=================================");
-		}
+  //      if (Input.GetMouseButtonDown (1)) {
+		//	//main_comp.Dispose ();
+		//	//SceneManager.LoadScene (1);
+		//}
+		
 	}
 	//******************************************************************
-	private void test (string aa){
-		logger.warn("=======this is a test ========");
-	}
 
 	private void comp_init(){
 		UIPackage.AddPackage ("UI/TankFight");
@@ -137,10 +133,10 @@ public class UIRoot : MonoBehaviour {
 		}
 	}
 	
-	private void table_times_add (string key){
-		times.Add (key, true);
-		logger.warn ("[Function][do_once]:" + key + "be done once and has been a member in table 'times'");
-	}
+	//private void table_times_add (string key){
+	//	times.Add (key, true);
+	//	logger.warn ("[Function][do_once]:" + key + "be done once and has been a member in table 'times'");
+	//}
 //	private bool is_times (string key){
 //		return true;
 //	}
@@ -150,25 +146,4 @@ public class UIRoot : MonoBehaviour {
 		select_direction ();
 	}
 
-	private void do_once (my_delegate func, string key, bool is_param, string param, string param_type)
-	{
-		bool ret = true;
-		if (times.ContainsKey (key) && times [key]) {
-			return;
-		}
-		switch (param_type) {
-		case "s":
-			func (param);
-			table_times_add(key);
-			break;
-		case "n":
-			int param_n;
-			ret = int.TryParse (param, out param_n);
-			if (ret) {
-				func(param_n);
-				table_times_add(key);
-			}
-			break;
-		}
-	}
 }

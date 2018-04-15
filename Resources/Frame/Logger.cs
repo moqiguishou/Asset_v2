@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Logger {
+
 	public void log (string str){
 		Debug.Log(str);
+        
 	}
 
     //日志封装函数
@@ -12,7 +14,7 @@ public class Logger {
     //        num_param: 该函数的参数数量；
     //        string[] param_key: 参数名+参数值的集合；(参数值以string形式保存)
     //打印出封装日志（Func<param1 = param1, param2 = param2>）
-    public void log(string func_name, int num_param, params string[] my_param)
+    public void log_func(string func_name, int num_param, params string[] my_param)
     {
         string str = "";
         str = str + "<color=#a52a2aff>" + func_name + "</color>" + "<";
